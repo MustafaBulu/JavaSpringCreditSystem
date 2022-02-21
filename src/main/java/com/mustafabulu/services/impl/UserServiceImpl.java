@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserServices {
 
     //LIST
     @Override
-    public Iterable<UserDto> getAllUser() {
+    public List<UserDto> getAllUser() {
         List<UserDto>  listDto=new ArrayList<>();
         Iterable<UserEntity> userEntities=userRepository.findAll();
         for(UserEntity temp :userEntities ){
