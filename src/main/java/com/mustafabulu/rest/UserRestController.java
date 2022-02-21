@@ -2,60 +2,75 @@ package com.mustafabulu.rest;
 
 
 
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.mustafabulu.dto.UserDto;
 import com.mustafabulu.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-@CrossOrigin(origins="http://localhost:3000") //CORS
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/")
 public class UserRestController {
+
 
     @Autowired
     public UserServices userServices;
 
-    //LIST
-    // http://localhost:8080/api/v1/users/list
-    @GetMapping("/users/list")
-    public List<UserDto> listUsers(){
-        List<UserDto> userDto=userServices.getAllUser();
-        return  userDto;
+    // ROOT
+    // http://localhost:8080/api/v1/index
+    @GetMapping("/index")
+    @ResponseBody
+    public String  getRoot() {
+        return "index Sayfası";
     }
 
-
+    //LIST
+    // http://localhost:8080/api/v1/users
+    @GetMapping("/users")
+    public List<UserDto> getAllUsers() {
+        List<UserDto> userDto = (List<UserDto>) userServices.getAllUsers();
+        return userDto;
+    }
 
     //FIND
-    // http://localhost:8080/api/v1/users/find/1
-    @GetMapping("/users/find/{id}")
-    public UserDto findUsers(@PathVariable(value = "id") Long id){
-        UserDto userDto=userServices.find(id);
-        return  userDto;
+    // http://localhost:8080/api/v1/users/1
+    @GetMapping("/users/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
+        List<UserDto> userDto = (List<UserDto>) userServices.getAllUsers();
+        return ResponseEntity.ok(userDto.get(0));
     }
 
-
-    //POST
-    // http://localhost:8080/api/v1/users/post
-    @PostMapping("/users/post")
-    public UserDto postUsers(@RequestBody  UserDto userDto){
-        userServices.save(userDto);
-        return  userDto;
+    //SAVE
+    // http://localhost:8080/api/v1/users
+    @PostMapping("/users")
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        userServices.createUser(userDto);
+        return userDto;
     }
 
-    //PUT
-    // http://localhost:8080/api/v1/users/put
-    @PutMapping("/users/put")
-    public void putUsers(UserDto userDto){
-        userServices.save(userDto);
+    //UPDATE
+    // http://localhost:8080/api/v1/users/2
+    @PutMapping("/users/{id}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDetails) {
+        userServices.updateUser(id, userDetails);
+        return ResponseEntity.ok(userDetails);
     }
 
     //DELETE
-    // http://localhost:8080/api/v1/users/delete/1
-    @DeleteMapping ("/users/delete/{id}")
-    public void deleteUsers( @PathVariable(value = "id") Long id){
-        userServices.delete(id);
+    // http://localhost:8080/api/v1/users/7
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
+        userServices.deleteUser(id);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return ResponseEntity.ok(response);
     }
 
 

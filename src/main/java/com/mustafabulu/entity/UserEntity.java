@@ -12,13 +12,12 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Log4j2
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 
 public class UserEntity extends BaseEntityAudit implements Serializable {
 
@@ -35,6 +34,11 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
     private String phoneNumber;
 
 
-
-
+    public UserEntity(String identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber) {
+        super();
+        this.identificationNumber = identificationNumber;
+        this.firstName_lastName = firstName_lastName;
+        this.monthlyIncome = monthlyIncome;
+        this.phoneNumber = phoneNumber;
+    }
 }
