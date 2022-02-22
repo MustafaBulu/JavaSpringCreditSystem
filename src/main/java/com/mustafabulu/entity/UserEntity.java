@@ -33,12 +33,20 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
     @Column(name="phone_number")
     private String phoneNumber;
 
+    @Column(name="credit_limit")
+    private String creditLimit;
 
-    public UserEntity(String identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber) {
+    @Column(name="credit_status")
+    private String creditStatus;
+
+
+    public UserEntity(String identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber, String creditLimit, String creditStatus) {
         super();
         this.identificationNumber = identificationNumber;
         this.firstName_lastName = firstName_lastName;
         this.monthlyIncome = monthlyIncome;
         this.phoneNumber = phoneNumber;
+        this.creditLimit = creditLimit;
+        this.creditStatus = creditStatus;
     }
 }

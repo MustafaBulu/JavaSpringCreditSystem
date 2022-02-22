@@ -43,8 +43,13 @@ public class UserRestController {
     // http://localhost:8080/api/v1/users/1
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        List<UserDto> userDto = (List<UserDto>) userServices.getAllUsers();
-        return ResponseEntity.ok(userDto.get(0));
+        ResponseEntity<UserDto> userDto =userServices.getUserById(id);
+        return userDto;
+
+
+        /*public ResponseEntity<ResponseEntity<UserDto>> getUserById(@PathVariable Long id) {
+            ResponseEntity<UserDto> userDto =userServices.getAllUsers(id);
+            return ResponseEntity.ok(userDto);*/
     }
 
     //SAVE

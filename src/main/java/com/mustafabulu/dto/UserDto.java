@@ -17,4 +17,9 @@ public class UserDto {
     private String firstName_lastName;
     private String monthlyIncome;
     private String phoneNumber;
+    private String creditLimit;
+    private String creditStatus;
+
+
+
 }
