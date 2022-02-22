@@ -22,7 +22,7 @@ import java.io.Serializable;
 public class UserEntity extends BaseEntityAudit implements Serializable {
 
     @Column(name="identification_number")
-    private String identificationNumber;
+    private Long identificationNumber;
 
     @Column(name="firstname_lastname")
     private String firstName_lastName;
@@ -40,8 +40,7 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
     private String creditStatus;
 
 
-    public UserEntity(String identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber, String creditLimit, String creditStatus) {
-        super();
+    public UserEntity(Long identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber, String creditLimit, String creditStatus) {
         this.identificationNumber = identificationNumber;
         this.firstName_lastName = firstName_lastName;
         this.monthlyIncome = monthlyIncome;

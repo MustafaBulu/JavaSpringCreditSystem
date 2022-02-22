@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class UserDto {
     private Long id;
-    private String identificationNumber;
+    private Long identificationNumber;
     private String firstName_lastName;
     private String monthlyIncome;
     private String phoneNumber;

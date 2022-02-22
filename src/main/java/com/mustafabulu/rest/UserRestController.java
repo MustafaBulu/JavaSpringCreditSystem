@@ -52,6 +52,19 @@ public class UserRestController {
             return ResponseEntity.ok(userDto);*/
     }
 
+    //FIND with tc
+    // http://localhost:8080/api/v1/users/tc/1
+    @GetMapping("/users/tc/{identificationNumber}")
+    public ResponseEntity<UserDto> getUserByIdentificationNumber(@PathVariable Long identificationNumber) {
+        ResponseEntity<UserDto> userDto =userServices.getUserByIdentificationNumber(identificationNumber);
+        return userDto;
+
+
+        /*public ResponseEntity<ResponseEntity<UserDto>> getUserById(@PathVariable Long id) {
+            ResponseEntity<UserDto> userDto =userServices.getAllUsers(id);
+            return ResponseEntity.ok(userDto);*/
+    }
+
     //SAVE
     // http://localhost:8080/api/v1/users
     @PostMapping("/users")

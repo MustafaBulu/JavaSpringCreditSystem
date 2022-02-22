@@ -49,6 +49,22 @@ public class UserServiceImpl implements UserServices {
         return ResponseEntity.ok(userDto);
     }
 
+    //FIND
+    // http://localhost:8080/api/v1/users/tc/123123
+    // get user by id rest api
+    @GetMapping("/users/tc/{identificationNumber}")
+    @Override
+    public ResponseEntity<UserDto> getUserByIdentificationNumber(@PathVariable Long identificationNumber) {
+        UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
+                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
+        UserDto userDto = EntityToDto(user);//model
+        return ResponseEntity.ok(userDto);
+    }
+
+
+
+
+
     //SAVE
     // http://localhost:8080/api/v1/users
     @PostMapping("/users")
