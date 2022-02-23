@@ -12,10 +12,10 @@ public interface UserServices {
     //CRUD
     public List<UserDto> getAllUsers();
     public UserDto createUser(UserDto userDto);
-    public ResponseEntity<UserDto> getUserById(Long id);
     public ResponseEntity<UserDto> getUserByIdentificationNumber(Long identificationNumber);
-    public ResponseEntity<UserDto> updateUser(Long id, UserDto userDto);
-    public ResponseEntity<Map<String, Boolean>> deleteUser(Long id);
+    public ResponseEntity<UserDto> getUserByCreditStatus(Long identificationNumber,UserDto userDto);
+    public ResponseEntity<UserDto> updateUser(Long identificationNumber, UserDto userDto);
+    public ResponseEntity<Map<String, Boolean>> deleteUser(Long identificationNumber);
 
     //model mapper
     public UserDto EntityToDto(UserEntity userEntity);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mustafabulu.dto.UserDto;
+import com.mustafabulu.entity.UserEntity;
 import com.mustafabulu.services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -39,18 +40,6 @@ public class UserRestController {
         return userDto;
     }
 
-    //FIND
-    // http://localhost:8080/api/v1/users/1
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        ResponseEntity<UserDto> userDto =userServices.getUserById(id);
-        return userDto;
-
-
-        /*public ResponseEntity<ResponseEntity<UserDto>> getUserById(@PathVariable Long id) {
-            ResponseEntity<UserDto> userDto =userServices.getAllUsers(id);
-            return ResponseEntity.ok(userDto);*/
-    }
 
     //FIND with tc
     // http://localhost:8080/api/v1/users/tc/1
@@ -65,6 +54,14 @@ public class UserRestController {
             return ResponseEntity.ok(userDto);*/
     }
 
+    //get status
+    // http://localhost:8080/api/v1/users/getstatus/12345
+    @GetMapping("/users/getstatus/{identificationNumber}")
+    public ResponseEntity<UserDto> getUserByCreditStatus(@PathVariable Long identificationNumber) {
+        ResponseEntity<UserDto> userDto =userServices.getUserByIdentificationNumber(identificationNumber);
+        return userDto;
+    }
+
     //SAVE
     // http://localhost:8080/api/v1/users
     @PostMapping("/users")
@@ -75,17 +72,17 @@ public class UserRestController {
 
     //UPDATE
     // http://localhost:8080/api/v1/users/2
-    @PutMapping("/users/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody UserDto userDetails) {
-        userServices.updateUser(id, userDetails);
+    @PutMapping("/users/{identificationNumber}")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long identificationNumber, @RequestBody UserDto userDetails) {
+        userServices.updateUser(identificationNumber, userDetails);
         return ResponseEntity.ok(userDetails);
     }
 
     //DELETE
     // http://localhost:8080/api/v1/users/7
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long id) {
-        userServices.deleteUser(id);
+    @DeleteMapping("/users/{identificationNumber}")
+    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long identificationNumber) {
+        userServices.deleteUser(identificationNumber);
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);

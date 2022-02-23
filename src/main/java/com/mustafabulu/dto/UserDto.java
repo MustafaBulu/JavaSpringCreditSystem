@@ -15,9 +15,9 @@ public class UserDto {
     private Long id;
     private Long identificationNumber;
     private String firstName_lastName;
-    private String monthlyIncome;
+    private Long monthlyIncome;
     private String phoneNumber;
-    private String creditLimit;
+    private Long creditLimit;
     private String creditStatus;
 
 

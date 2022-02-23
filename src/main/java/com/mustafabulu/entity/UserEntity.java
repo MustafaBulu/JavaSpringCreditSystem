@@ -28,19 +28,19 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
     private String firstName_lastName;
 
     @Column(name="monthly_income")
-    private String monthlyIncome;
+    private Long monthlyIncome;
 
     @Column(name="phone_number")
     private String phoneNumber;
 
     @Column(name="credit_limit")
-    private String creditLimit;
+    private Long creditLimit;
 
     @Column(name="credit_status")
     private String creditStatus;
 
 
-    public UserEntity(Long identificationNumber, String firstName_lastName, String monthlyIncome, String phoneNumber, String creditLimit, String creditStatus) {
+    public UserEntity(Long identificationNumber, String firstName_lastName, Long monthlyIncome, String phoneNumber, Long creditLimit, String creditStatus) {
         this.identificationNumber = identificationNumber;
         this.firstName_lastName = firstName_lastName;
         this.monthlyIncome = monthlyIncome;
