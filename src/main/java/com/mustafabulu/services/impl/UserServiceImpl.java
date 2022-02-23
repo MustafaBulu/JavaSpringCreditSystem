@@ -4,6 +4,7 @@ import com.mustafabulu.dto.UserDto;
 import com.mustafabulu.entity.UserEntity;
 import com.mustafabulu.exception.ResourceNotFoundException;
 import com.mustafabulu.repository.UserRepository;
+import com.mustafabulu.services.CreditService;
 import com.mustafabulu.services.UserServices;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserServices {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    CreditService creditService;
 
 
     //LIST
@@ -54,11 +58,11 @@ public class UserServiceImpl implements UserServices {
     @GetMapping("/users/getstatus/{identificationNumber}")
     @Override
     public ResponseEntity<UserDto> getUserByCreditStatus(@PathVariable Long identificationNumber, UserDto userDto) {
-
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
 
-        int credit_score=700;
+        int credit_score=creditService.getCreditScore(identificationNumber);
+
         int credit_limit_multiplier=4;
         if (credit_score<500){
             user.setCreditStatus("RED");
@@ -82,8 +86,25 @@ public class UserServiceImpl implements UserServices {
     // http://localhost:8080/api/v1/users
     @PostMapping("/users")
     public UserDto createUser(@RequestBody  UserDto userDto) { //@RequestBody
-        UserEntity userEntity = DtoToEntity(userDto);//ModelMapper
-        userRepository.save(userEntity);
+        UserEntity user = DtoToEntity(userDto);//ModelMapper
+        int credit_score=creditService.getCreditScore(user.getIdentificationNumber());
+
+        int credit_limit_multiplier=4;
+        if (credit_score<500){
+            user.setCreditStatus("RED");
+        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()<5000){
+            user.setCreditStatus("ONAY");
+            user.setCreditLimit(10000L);
+            userRepository.save(user);
+        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()>=5000){
+            user.setCreditStatus("ONAY");
+            user.setCreditLimit(20000L);
+        }else if(credit_score>=1000){
+            user.setCreditStatus("ONAY");
+            user.setCreditLimit(user.getMonthlyIncome()*credit_limit_multiplier);
+        }
+
+        userRepository.save(user);
         return userDto;
     }
 
