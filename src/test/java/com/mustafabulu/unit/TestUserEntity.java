@@ -1,7 +1,5 @@
 package com.mustafabulu.unit;
 
-
-import com.mustafabulu.dto.UserDto;
 import com.mustafabulu.entity.UserEntity;
 import com.mustafabulu.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -34,7 +32,9 @@ public class TestUserEntity {
         userEntity.setCreditLimit(20000L);
         userEntity.setCreditStatus("ok");
         userRepository.save(userEntity);
-        Assertions.assertNotNull(userRepository.findById(1L).get());
+        long userId=userEntity.getId();
+        Assertions.assertEquals(true,userRepository.findById(userId).isPresent());
+
 
     }
 
