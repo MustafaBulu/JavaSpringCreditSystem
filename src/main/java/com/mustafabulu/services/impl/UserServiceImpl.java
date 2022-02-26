@@ -27,9 +27,7 @@ public class UserServiceImpl implements UserServices {
     CreditService creditService;
 
 
-    //LIST
-    // http://localhost:8080/api/v1/users
-    @GetMapping("/users")
+
     @Override
     public List<UserDto> getAllUsers(){
         List<UserDto> listDto = new ArrayList<>();
@@ -41,12 +39,8 @@ public class UserServiceImpl implements UserServices {
         return  listDto;
     }
 
-    //FIND
-    // http://localhost:8080/api/v1/users/tc/123123
-    // get user by id rest api
-    @GetMapping("/users/tc/{identificationNumber}")
     @Override
-    public ResponseEntity<UserDto> getUserByIdentificationNumber(@PathVariable Long identificationNumber) {
+    public ResponseEntity<UserDto> getUserByIdentificationNumber(Long identificationNumber) {
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
         UserDto userDto = EntityToDto(user);//model
@@ -55,7 +49,7 @@ public class UserServiceImpl implements UserServices {
 
 
 
-    @GetMapping("/users/getstatus/{identificationNumber}")
+
     @Override
     public ResponseEntity<UserDto> getUserByCreditStatus(@PathVariable Long identificationNumber, UserDto userDto) {
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
@@ -82,10 +76,8 @@ public class UserServiceImpl implements UserServices {
     }
 
 
-    //SAVE
-    // http://localhost:8080/api/v1/users
-    @PostMapping("/users")
-    public UserDto createUser(@RequestBody  UserDto userDto) { //@RequestBody
+    @Override
+    public UserDto createUser(UserDto userDto) { //@RequestBody
         UserEntity user = DtoToEntity(userDto);//ModelMapper
         int credit_score=creditService.getCreditScore(user.getIdentificationNumber());
 
@@ -108,11 +100,10 @@ public class UserServiceImpl implements UserServices {
         return userDto;
     }
 
-    //DELETE
-    // http://localhost:8080/api/v1/users
-    @DeleteMapping("/users/{identificationNumber}")
+
+
     @Override
-    public ResponseEntity<Map<String, Boolean>> deleteUser(@PathVariable Long identificationNumber){
+    public ResponseEntity<Map<String, Boolean>> deleteUser(Long identificationNumber){
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
 
@@ -122,9 +113,7 @@ public class UserServiceImpl implements UserServices {
         return ResponseEntity.ok(response);
     }
 
-    //UPDATE
-    // http://localhost:8080/api/v1/users
-    @PutMapping("/users/{identificationNumber}")
+
     @Override
     public ResponseEntity<UserDto> updateUser(@PathVariable Long identificationNumber, @RequestBody UserDto userDetails){
         UserEntity userEntity = DtoToEntity(userDetails);//ModelMapper
