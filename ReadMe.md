@@ -21,5 +21,8 @@ Java spring credit system is made to define credit according to certain rules wi
 - model mapper
 - spring-boot-starter-test
 
+### Swagger
+http://localhost:8080/swagger-ui/index.html
+
 ###FrondEnd
 - [React.js Project](https://github.com/MustafaBulu/creditsystem_frontend) 
