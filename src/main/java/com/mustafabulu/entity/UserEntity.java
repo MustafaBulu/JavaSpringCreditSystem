@@ -6,13 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Log4j2
 
@@ -25,27 +24,24 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
     private Long identificationNumber;
 
     @Column(name="firstname_lastname")
-    private String firstName_lastName;
+    String firstName_lastName;
 
     @Column(name="monthly_income")
-    private Long monthlyIncome;
+    Long monthlyIncome;
 
     @Column(name="phone_number")
-    private String phoneNumber;
+    String phoneNumber;
 
-    @Column(name="credit_limit")
-    private Long creditLimit;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    UserCreditEntity userCredit;
 
-    @Column(name="credit_status")
-    private String creditStatus;
-
-
-    public UserEntity(Long identificationNumber, String firstName_lastName, Long monthlyIncome, String phoneNumber, Long creditLimit, String creditStatus) {
+    public UserEntity(Long identificationNumber, String firstName_lastName, Long monthlyIncome, String phoneNumber) {
         this.identificationNumber = identificationNumber;
         this.firstName_lastName = firstName_lastName;
         this.monthlyIncome = monthlyIncome;
         this.phoneNumber = phoneNumber;
-        this.creditLimit = creditLimit;
-        this.creditStatus = creditStatus;
     }
+
+
 }

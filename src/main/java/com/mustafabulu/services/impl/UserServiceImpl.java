@@ -1,6 +1,7 @@
 package com.mustafabulu.services.impl;
 
 import com.mustafabulu.dto.UserDto;
+import com.mustafabulu.entity.UserCreditEntity;
 import com.mustafabulu.entity.UserEntity;
 import com.mustafabulu.exception.ResourceNotFoundException;
 import com.mustafabulu.repository.UserRepository;
@@ -51,25 +52,24 @@ public class UserServiceImpl implements UserServices {
 
 
     @Override
-    public ResponseEntity<UserDto> getUserByCreditStatus(@PathVariable Long identificationNumber, UserDto userDto) {
+    public ResponseEntity<UserDto> getUserByCreditStatus(Long identificationNumber, UserDto userDto) {
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
 
         int credit_score=creditService.getCreditScore(identificationNumber);
 
         int credit_limit_multiplier=4;
-        if (credit_score<500){
-            user.setCreditStatus("RED");
-        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()<5000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(10000L);
-            userRepository.save(user);
-        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()>=5000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(20000L);
-        }else if(credit_score>=1000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(user.getMonthlyIncome()*credit_limit_multiplier);
+        if (credit_score < 500) {
+            user.getUserCredit().setCreditStatus("RED");
+        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() < 5000) {
+            user.getUserCredit().setCreditStatus("ONAY");
+            user.getUserCredit().setCreditLimit(10000L);
+        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() >= 5000) {
+            user.getUserCredit().setCreditStatus("ONAY");
+            user.getUserCredit().setCreditLimit(20000L);
+        } else if (credit_score >= 1000) {
+            user.getUserCredit().setCreditStatus("ONAY");
+            user.getUserCredit().setCreditLimit(20000L);
         }
         userRepository.save(user);
         return ResponseEntity.ok(userDto);
@@ -77,27 +77,31 @@ public class UserServiceImpl implements UserServices {
 
 
     @Override
-    public UserDto createUser(UserDto userDto) { //@RequestBody
-        UserEntity user = DtoToEntity(userDto);//ModelMapper
+    public void createUser(UserDto userDto) { //@RequestBody
+        UserEntity user = DtoToEntity(userDto); //ModelMapper
+        UserCreditEntity userCredit =CreditDtoToEntity(userDto); //ModelMapper
+
+        userCredit.setUserId(user.getIdentificationNumber());
+
         int credit_score=creditService.getCreditScore(user.getIdentificationNumber());
 
         int credit_limit_multiplier=4;
-        if (credit_score<500){
-            user.setCreditStatus("RED");
-        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()<5000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(10000L);
-            userRepository.save(user);
-        }else if(credit_score>= 500 && credit_score<1000 && user.getMonthlyIncome()>=5000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(20000L);
-        }else if(credit_score>=1000){
-            user.setCreditStatus("ONAY");
-            user.setCreditLimit(user.getMonthlyIncome()*credit_limit_multiplier);
+        if (credit_score < 500) {
+            userCredit.setCreditStatus("RED");
+        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() < 5000) {
+            userCredit.setCreditStatus("ONAY");
+            userCredit.setCreditLimit(10000L);
+        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() >= 5000) {
+            userCredit.setCreditStatus("ONAY");
+            userCredit.setCreditLimit(20000L);
+        } else if (credit_score >= 1000) {
+            userCredit.setCreditStatus("ONAY");
+            userCredit.setCreditLimit(20000L);
         }
 
+        user.setUserCredit(userCredit);
+
         userRepository.save(user);
-        return userDto;
     }
 
 
@@ -115,7 +119,7 @@ public class UserServiceImpl implements UserServices {
 
 
     @Override
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long identificationNumber, @RequestBody UserDto userDetails){
+    public ResponseEntity<UserDto> updateUser(Long identificationNumber, UserDto userDetails){
         UserEntity userEntity = DtoToEntity(userDetails);//ModelMapper
 
         UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
@@ -148,4 +152,12 @@ public class UserServiceImpl implements UserServices {
         UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
         return userEntity;
     }
+
+    @Override
+    public UserCreditEntity CreditDtoToEntity(UserDto userDto) {
+        UserCreditEntity userCreditEntity = modelMapper.map(userDto, UserCreditEntity.class);
+        return userCreditEntity;
+    }
+
+
 }
