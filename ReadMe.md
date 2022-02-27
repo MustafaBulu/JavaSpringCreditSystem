@@ -17,9 +17,9 @@ Java spring credit system is made to define credit according to certain rules wi
 - Spring Boot DevTools
 - Spring Configuration Processor
 - Spring Boot Actuator
-- swagger open-api-3.0
-- model mapper
-- spring-boot-starter-test
+- Swagger open-api-3.0
+- Model mapper
+- Spring-boot-starter-test
 
 ### Swagger
 http://localhost:8080/swagger-ui/index.html
