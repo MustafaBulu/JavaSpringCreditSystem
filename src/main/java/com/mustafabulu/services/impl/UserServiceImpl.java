@@ -47,30 +47,6 @@ public class UserServiceImpl implements UserServices {
     }
 
     @Override
-    public ResponseEntity<UserDto> getUserByCreditStatus(Long identificationNumber, UserDto userDto) {
-        UserEntity user = userRepository.findUserEntitiesByIdentificationNumber(identificationNumber)
-                .orElseThrow(() -> new ResourceNotFoundException("User not exist with id :" + identificationNumber));
-
-        int credit_score=creditService.getCreditScore(identificationNumber);
-
-        int credit_limit_multiplier=4;
-        if (credit_score < 500) {
-            user.getUserCredit().setCreditStatus("RED");
-        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() < 5000) {
-            user.getUserCredit().setCreditStatus("ONAY");
-            user.getUserCredit().setCreditLimit(10000L);
-        } else if (credit_score >= 500 && credit_score < 1000 && user.getMonthlyIncome() >= 5000) {
-            user.getUserCredit().setCreditStatus("ONAY");
-            user.getUserCredit().setCreditLimit(20000L);
-        } else if (credit_score >= 1000) {
-            user.getUserCredit().setCreditStatus("ONAY");
-            user.getUserCredit().setCreditLimit(20000L);
-        }
-        userRepository.save(user);
-        return ResponseEntity.ok(userDto);
-    }
-
-    @Override
     public void createUser(UserDto userDto) {
         UserEntity user = DtoToEntity(userDto); //ModelMapper
         UserCreditEntity userCredit =CreditDtoToEntity(userDto); //ModelMapper
@@ -89,7 +65,7 @@ public class UserServiceImpl implements UserServices {
             userCredit.setCreditLimit(20000L);
         } else if (credit_score >= 1000) {
             userCredit.setCreditStatus("ONAY");
-            userCredit.setCreditLimit(20000L*credit_limit_multiplier);
+            userCredit.setCreditLimit(user.getMonthlyIncome()*credit_limit_multiplier);
         }
 
         user.setUserCredit(userCredit);
@@ -122,8 +98,8 @@ public class UserServiceImpl implements UserServices {
         user.setPhoneNumber(userEntity.getPhoneNumber());
 
         UserEntity updatedUser = userRepository.save(user);
-        UserDto teacherDto = EntityToDto(updatedUser);//model
-        return ResponseEntity.ok(teacherDto);
+        UserDto userDto = EntityToDto(updatedUser);//model
+        return ResponseEntity.ok(userDto);
     }
 
     ////////////////////////////////////

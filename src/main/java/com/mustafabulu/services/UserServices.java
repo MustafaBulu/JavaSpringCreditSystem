@@ -13,7 +13,6 @@ public interface UserServices {
     public List<UserDto> getAllUsers();
     public void createUser(UserDto userDto);
     public ResponseEntity<UserDto> getUserByIdentificationNumber(Long identificationNumber);
-    public ResponseEntity<UserDto> getUserByCreditStatus(Long identificationNumber,UserDto userDto);
     public ResponseEntity<UserDto> updateUser(Long identificationNumber, UserDto userDto);
     public ResponseEntity<Map<String, Boolean>> deleteUser(Long identificationNumber);
 
