@@ -29,8 +29,6 @@ public class TestUserEntity {
         userEntity.setFirstName_lastName("Mustafa Bulu");
         userEntity.setMonthlyIncome(5000L);
         userEntity.setPhoneNumber("5549999900");
-        userEntity.setCreditLimit(20000L);
-        userEntity.setCreditStatus("ok");
         userRepository.save(userEntity);
         long userId=userEntity.getId();
         Assertions.assertEquals(true,userRepository.findById(userId).isPresent());
