@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserServices {
     @Autowired
     CreditService creditService;
 
-
-
     @Override
     public List<UserDto> getAllUsers(){
         List<UserDto> listDto = new ArrayList<>();
@@ -47,9 +45,6 @@ public class UserServiceImpl implements UserServices {
         UserDto userDto = EntityToDto(user);//model
         return ResponseEntity.ok(userDto);
     }
-
-
-
 
     @Override
     public ResponseEntity<UserDto> getUserByCreditStatus(Long identificationNumber, UserDto userDto) {
@@ -75,14 +70,12 @@ public class UserServiceImpl implements UserServices {
         return ResponseEntity.ok(userDto);
     }
 
-
     @Override
-    public void createUser(UserDto userDto) { //@RequestBody
+    public void createUser(UserDto userDto) {
         UserEntity user = DtoToEntity(userDto); //ModelMapper
         UserCreditEntity userCredit =CreditDtoToEntity(userDto); //ModelMapper
 
         userCredit.setUserId(user.getIdentificationNumber());
-
         int credit_score=creditService.getCreditScore(user.getIdentificationNumber());
 
         int credit_limit_multiplier=4;
@@ -96,11 +89,10 @@ public class UserServiceImpl implements UserServices {
             userCredit.setCreditLimit(20000L);
         } else if (credit_score >= 1000) {
             userCredit.setCreditStatus("ONAY");
-            userCredit.setCreditLimit(20000L);
+            userCredit.setCreditLimit(20000L*credit_limit_multiplier);
         }
 
         user.setUserCredit(userCredit);
-
         userRepository.save(user);
     }
 
@@ -116,7 +108,6 @@ public class UserServiceImpl implements UserServices {
         response.put("deleted", Boolean.TRUE);
         return ResponseEntity.ok(response);
     }
-
 
     @Override
     public ResponseEntity<UserDto> updateUser(Long identificationNumber, UserDto userDetails){
@@ -135,24 +126,22 @@ public class UserServiceImpl implements UserServices {
         return ResponseEntity.ok(teacherDto);
     }
 
-
-
     ////////////////////////////////////
-    //Model Mapper Entity ==> Dto
+    //Model Mapper EntityToDto
     @Override
     public UserDto EntityToDto(UserEntity userEntity) {
         UserDto userDto = modelMapper.map(userEntity, UserDto.class);
         return userDto;
     }
 
-    //Model Mapper Dto  ==> Entity
-    //Model Mapper Dto  ==> Entity
+    //Model Mapper DtoToEntity
     @Override
     public UserEntity DtoToEntity(UserDto userDto) {
         UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
         return userEntity;
     }
 
+    //Model Mapper EntityToDto
     @Override
     public UserCreditEntity CreditDtoToEntity(UserDto userDto) {
         UserCreditEntity userCreditEntity = modelMapper.map(userDto, UserCreditEntity.class);

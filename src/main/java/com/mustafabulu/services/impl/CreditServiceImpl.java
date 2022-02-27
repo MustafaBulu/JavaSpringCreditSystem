@@ -1,6 +1,5 @@
 package com.mustafabulu.services.impl;
 
-
 import com.mustafabulu.services.CreditService;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +10,6 @@ public class CreditServiceImpl implements CreditService {
 
     @Override
     public int getCreditScore(long identificationNumber) {
-        return 600;
+        return 1111;
     }
 }

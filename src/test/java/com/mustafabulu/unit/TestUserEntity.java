@@ -6,9 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.List;
-
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -16,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest
 public class TestUserEntity {
-
 
     @Autowired
     UserRepository userRepository;
@@ -32,8 +29,6 @@ public class TestUserEntity {
         userRepository.save(userEntity);
         long userId=userEntity.getId();
         Assertions.assertEquals(true,userRepository.findById(userId).isPresent());
-
-
     }
 
     //LIST
@@ -65,8 +60,5 @@ public class TestUserEntity {
         userRepository.deleteById(1L);
         assertThat(userRepository.existsById(1L)).isFalse();
     }
-
-
-
 
 }

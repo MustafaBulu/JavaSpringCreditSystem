@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -42,6 +41,4 @@ public class UserEntity extends BaseEntityAudit implements Serializable {
         this.monthlyIncome = monthlyIncome;
         this.phoneNumber = phoneNumber;
     }
-
-
 }
